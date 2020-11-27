@@ -3,7 +3,7 @@ const heroes = JSON.parse(fs.readFileSync("./data/heroes.json", "utf-8"))
 
 module.exports = {
     data: function (req, res) {
-        res.send(heroes)
+        res.render("heroes", {title : "Listado de héroes", heroes: heroes})
     },
     bio: function (req, res) {
         let id = req.params.idHeroe;
@@ -13,12 +13,12 @@ module.exports = {
         });
         let heroeSeleccionado = heroe[0];
         if (heroeSeleccionado == undefined) {
-            return res.send("<br>No encontramos un héroe para mostrarte su biografía")
+            return res.render("error1", {title: "Error", error: "No encontramos un héroe para mostrarte su biografía"})
         }
         if (ok == "ok") {
-            return res.send(`<br>${heroeSeleccionado.nombre}: ${heroeSeleccionado.resenia}`)
+            return res.render("bio", {nombre : heroeSeleccionado.nombre, bio: heroeSeleccionado.resenia})
         } else {
-            return res.send(`<br>${heroeSeleccionado.nombre}: Lamento que no desees saber más de mí.`)
+            return res.render("bio", {nombre : heroeSeleccionado.nombre, bio : "Lamento que no desees saber más nada de mí"})
         }
     },
     heroe: function (req, res) {
@@ -30,9 +30,9 @@ module.exports = {
         let heroeSeleccionado = heroe[0];
 
         if (heroeSeleccionado == undefined) {
-            res.send('<br>Este héroe no fue encontrado :(  pruebe con otro numero de id.');
+            res.render("error1", {title:"Error",error: "Este héroe no fué encontrado, por favor ingrese otro id."})
         } else {
-            res.send(`<br>Hola, mi nombre es ${heroeSeleccionado.nombre} y soy ${heroeSeleccionado.profesion}`)
+            res.render("heroe",{nombre: heroeSeleccionado.nombre, profesion: heroeSeleccionado.profesion})
         }
     }
 }
